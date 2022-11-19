@@ -3,8 +3,9 @@ from dados import dados as dados_brutos
 # print(escolha)
 
 # create a function that creates a dictionary based on given keys
+continuar = True
 
-while True:
+while continuar:
     try:
         colunas = ['marca', 'modelo', 'combustivel', 'cilindros', 'tipo',
                    'potencia', 'peso', 'consumo_cidade', 'consumo_estrada', 'preco']
@@ -123,5 +124,6 @@ while True:
         print('---------------------------------------------')
     except:
         print('---------------------------------------------')
-        print('Escolha uma opção válida!')
+        print('Comando nao encontrado!')
         print('---------------------------------------------')
+        continuar = False
