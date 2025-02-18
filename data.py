@@ -1,4 +1,4 @@
-dados = [
+data = [
     ['Alfa-romero', '156 Sport', 'gas', 2,
         'conversível', 111, 4850, 8.8, 11.4, 132000],
     ['Alfa-romero', '145 Elegant', 'gas', 2, 'hatch', 154, 4900, 8, 10.9, 132000],
