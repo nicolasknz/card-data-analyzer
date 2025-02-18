@@ -1,144 +1,144 @@
-from dados import dados as dados_brutos
+from data import data as raw_data
 
 try:
-    colunas = ['marca', 'modelo', 'combustivel', 'cilindros', 'tipo',
-               'potencia', 'peso', 'consumo_cidade', 'consumo_estrada', 'preco']
-    dados = []
+    columns = ['brand', 'model', 'fuel', 'cylinders', 'type',
+               'power', 'weight', 'city_consumption', 'highway_consumption', 'price']
+    data = []
 
-    escolha = input('''Selecione uma opção:
-    1. Apresentação do desvio padrão de uma coluna específica
-    2. Apresentação dos veículos ordenados segundo uma das colunas específica
-    3. Apresentação dos 5 veículos com os maiores valores de uma coluna específica
-    4. Apresentação dos 5 veículos com os menores valores de uma coluna específica
-    5. Apresentação da quantidade de carros para cada tipo de valor de uma coluna específica
-    6. Exibir os todos os dados de um veículo fornecendo o nome do modelo
+    choice = input('''Select an option:
+    1. Display standard deviation for a specific column
+    2. Display vehicles sorted by a specific column
+    3. Display the top 5 vehicles with the highest values for a specific column
+    4. Display the top 5 vehicles with the lowest values for a specific column
+    5. Display the quantity of cars for each type of value in a specific column
+    6. Show all data for a vehicle by providing the model name
 
-    Sua escolha -> ''')
-    escolha = int(escolha)
+    Your choice -> ''')
+    choice = int(choice)
 
     print('')
     print('')
 
-    def tamanho_lista(lista):
-        tamanho = 0
-        for i in lista:
-            tamanho += 1
-        return tamanho
+    def list_size(lst):
+        size = 0
+        for i in lst:
+            size += 1
+        return size
 
-    def somar_lista(lista):
-        soma = 0
-        for i in lista:
-            soma += i
-        return soma
+    def sum_list(lst):
+        total = 0
+        for i in lst:
+            total += i
+        return total
 
-    # Transforma os dados brutos em uma lista de dicionários para facilitar a manipulação
-    for i in range(tamanho_lista(dados_brutos)):
-        dicionario = {}
-        for k in range(tamanho_lista(colunas)):
-            dicionario[colunas[k]] = dados_brutos[i][k]
-        dados.append(dicionario)
+    # Transforms raw data into a list of dictionaries for easier manipulation
+    for i in range(list_size(raw_data)):
+        dictionary = {}
+        for k in range(list_size(columns)):
+            dictionary[columns[k]] = raw_data[i][k]
+        data.append(dictionary)
 
-    def inverter_lista(lista):
-        lista_invertida = []
-        for i in range(tamanho_lista(lista)):
-            lista_invertida.append(lista[tamanho_lista(lista) - 1 - i])
-        return lista_invertida
+    def reverse_list(lst):
+        reversed_lst = []
+        for i in range(list_size(lst)):
+            reversed_lst.append(lst[list_size(lst) - 1 - i])
+        return reversed_lst
 
-    def bubble_sort_por_coluna(lista, coluna):
-        for i in range(tamanho_lista(lista)):
-            for j in range(tamanho_lista(lista) - 1):
-                if lista[j][coluna] > lista[j + 1][coluna]:
-                    lista[j], lista[j + 1] = lista[j + 1], lista[j]
-        return lista
+    def bubble_sort_by_column(lst, column):
+        for i in range(list_size(lst)):
+            for j in range(list_size(lst) - 1):
+                if lst[j][column] > lst[j + 1][column]:
+                    lst[j], lst[j + 1] = lst[j + 1], lst[j]
+        return lst
 
-    def desvio_padrao(lista, coluna):
-        valores = [valor[coluna] for valor in lista]
-        print(valores)
-        media = somar_lista(valores) / tamanho_lista(valores)
-        variancia = somar_lista(
-            [(x - media) ** 2 for x in valores]) / tamanho_lista(valores)
-        resultado = variancia ** 0.5
-        return ['Desvio padrao por consumo na cidade', resultado]
+    def standard_deviation(lst, column):
+        values = [value[column] for value in lst]
+        print(values)
+        mean = sum_list(values) / list_size(values)
+        variance = sum_list(
+            [(x - mean) ** 2 for x in values]) / list_size(values)
+        result = variance ** 0.5
+        return ['Standard deviation by city consumption', result]
 
-    def ordenar(lista, coluna):
-        lista_ordenada = bubble_sort_por_coluna(lista, coluna)
+    def sort(lst, column):
+        sorted_lst = bubble_sort_by_column(lst, column)
 
-        resposta = [
-            f'{item["marca"]} {item["modelo"]} -> {item["preco"]}'for item in lista_ordenada]
+        response = [
+            f'{item["brand"]} {item["model"]} -> {item["price"]}' for item in sorted_lst]
 
-        return ['Carros ordenados por preco', *resposta]
+        return ['Cars sorted by price', *response]
 
-    def ordernar_cinco_maiores(lista, coluna):
-        lista_ordenada = bubble_sort_por_coluna(lista, coluna)
-        lista_ordenada = inverter_lista(lista_ordenada)
-        cinco_maiores = [
-            f'{item["marca"]} {item["modelo"]} -> {item[coluna]}'for item in lista_ordenada[:5]
+    def sort_top_five_highest(lst, column):
+        sorted_lst = bubble_sort_by_column(lst, column)
+        sorted_lst = reverse_list(sorted_lst)
+        top_five = [
+            f'{item["brand"]} {item["model"]} -> {item[column]}' for item in sorted_lst[:5]
         ]
 
-        return ["Cinco carros mais potentes", *cinco_maiores]
+        return ["Top 5 most powerful cars", *top_five]
 
-    def ordenar_cinco_menores(lista, coluna):
-        lista_ordenada = bubble_sort_por_coluna(lista, coluna)
-        cinco_menores = [
-            f'{item["marca"]} {item["modelo"]} -> {item[coluna]}'for item in lista_ordenada[:5]]
+    def sort_top_five_lowest(lst, column):
+        sorted_lst = bubble_sort_by_column(lst, column)
+        top_five = [
+            f'{item["brand"]} {item["model"]} -> {item[column]}' for item in sorted_lst[:5]]
 
-        return ['Cinco carros com menor consumo na estrada', *cinco_menores]
+        return ['Top 5 cars with lowest highway consumption', *top_five]
 
-    def quantidade_por_tipo(lista, coluna):
-        valores = [valor[coluna] for valor in lista]
-        resposta = {}
-        for valor in valores:
-            if valor in resposta:
-                resposta[valor] += 1
+    def quantity_by_type(lst, column):
+        values = [value[column] for value in lst]
+        response = {}
+        for value in values:
+            if value in response:
+                response[value] += 1
             else:
-                resposta[valor] = 1
-        return ['Quantidade de carros pelo estilo', resposta]
+                response[value] = 1
+        return ['Quantity of cars by type', response]
 
-    def dados_por_modelo(lista, coluna):
-        modelo = input('Digite o modelo: ')
+    def data_by_model(lst, column):
+        model = input('Enter the model: ')
 
-        for item in lista:
-            if item[coluna] == modelo:
-                return ['Dados do carro pelo modelo', item]
-        return ['Dados do carro pelo modelo', 'Modelo não encontrado']
+        for item in lst:
+            if item[column] == model:
+                return ['Vehicle data by model', item]
+        return ['Vehicle data by model', 'Model not found']
 
-    # dicionario que mapeia as funções de acordo com a escolha do usuário
-    de_escolha_para_funcao = {
+    # Dictionary mapping user choices to functions
+    choice_to_function = {
         1: {
-            'coluna': 'consumo_cidade',
-            'funcao': desvio_padrao,
+            'column': 'city_consumption',
+            'function': standard_deviation,
         },
         2: {
-            'coluna': 'preco',
-            'funcao': ordenar,
+            'column': 'price',
+            'function': sort,
         },
         3: {
-            'coluna': 'potencia',
-            'funcao': ordernar_cinco_maiores,
+            'column': 'power',
+            'function': sort_top_five_highest,
         },
         4: {
-            'coluna': 'consumo_estrada',
-            'funcao': ordenar_cinco_menores,
+            'column': 'highway_consumption',
+            'function': sort_top_five_lowest,
         },
         5: {
-            'coluna': 'tipo',
-            'funcao': quantidade_por_tipo,
+            'column': 'type',
+            'function': quantity_by_type,
         },
         6: {
-            'coluna': 'modelo',
-            'funcao': dados_por_modelo,
+            'column': 'model',
+            'function': data_by_model,
         }
     }
 
-    # Mecanismo que define qual função será executada e qual coluna será usada baseada no input do usuário
-    coluna = de_escolha_para_funcao[escolha]['coluna']
-    funcao = de_escolha_para_funcao[escolha]['funcao']
-    resposta = funcao(dados, coluna)
+    # Mechanism that determines which function will be executed and which column will be used based on user input
+    column = choice_to_function[choice]['column']
+    function = choice_to_function[choice]['function']
+    response = function(data, column)
 
     print('---------------------------------------------')
-    print(*resposta, sep='\n')
+    print(*response, sep='\n')
     print('---------------------------------------------')
 except:
     print('---------------------------------------------')
-    print('Comando nao encontrado!')
+    print('Command not found!')
     print('---------------------------------------------')
